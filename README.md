@@ -1,4 +1,4 @@
-#Getting Started
+# Getting Started
 ## Installation
 TODO - how to install
 
@@ -38,7 +38,7 @@ HandleRemaingCommands(returnlist, model)
 
 InteractiveDashboardDemo shows a full example.
 
-##Customization
+## Customization
 The modules shown in the dashboard can be changed in the dashboard.json file, or by specifying a new config file
 in createDashboard().
 
@@ -65,7 +65,7 @@ A properly formatted dashboard.json file should look like this.
 ```
 This creates a dashboard with 2 rows of 3 cols. The dict after the module name contains config info.
 
-#Data Structure Info
+# Data Structure Info
 All data is sent in packets containing a data type (int) and data body (dict).
 
 All data going to the modules is appended to update list. This occurs in the DashboadCallbacks class.
@@ -174,5 +174,5 @@ Functions:
 
 All functions are called automatically from dashboard.
 
-#Module Info
+# Module Info
 TODO - all module info
