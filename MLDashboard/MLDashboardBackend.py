@@ -255,7 +255,67 @@ class DashboardCallbacks(Callback):
                 y = self.y_test[0:num]
                 self.updatelist.append(Message(MessageMode.Test_Set_Sample, {"x": x, "y": y}))
 
-            #TODO - rest of data sending
+            elif item.mode == MessageMode.Pred_Sample:
+                rmlist.append(index)
+                num = item.body["num"]
+                self.updatelist.append(Message(MessageMode.Pred_Sample,
+                                               {"x": self.x_test[0:num],
+                                                "y": self.y_test[0:num],
+                                                "pred": self.model.predict(self.x_test[0:num])}))
+
+            elif item.mode == MessageMode.Pred_Sample_Train:
+                rmlist.append(index)
+                num = item.body["num"]
+                self.updatelist.append(Message(MessageMode.Pred_Sample_Train,
+                                               {"x": self.x_train[0:num],
+                                                "y": self.y_train[0:num],
+                                                "pred": self.model.predict(self.x_train[0:num])}))
+
+            elif item.mode == MessageMode.Wrong_Pred_Sample:
+                rmlist.append(index)
+                maxnum = item.body["maxnum"]
+                attempts = item.body["attempts"]
+
+                preds = self.model.predict(self.x_test[0:attempts])
+                features = []
+                wrongpreds = []
+                correctresult = []
+                for i in range(0, len(attempts)):
+                    if preds[i] != self.y_test[i]:
+                        features.append(self.x_test[i])
+                        wrongpreds.append(preds[i])
+                        correctresult.append(self.y_test[i])
+
+                    if len(features) >= maxnum:
+                        break
+
+                self.updatelist.append(Message(MessageMode.Wrong_Pred_Sample,
+                                               {"x": features,
+                                                "y": correctresult,
+                                                "pred": wrongpreds}))
+
+            elif item.mode == MessageMode.Wrong_Pred_Sample_Train:
+                rmlist.append(index)
+                maxnum = item.body["maxnum"]
+                attempts = item.body["attempts"]
+
+                preds = self.model.predict(self.x_train[0:attempts])
+                features = []
+                wrongpreds = []
+                correctresult = []
+                for i in range(0, len(attempts)):
+                    if preds[i] != self.y_train[i]:
+                        features.append(self.x_train[i])
+                        wrongpreds.append(preds[i])
+                        correctresult.append(self.y_train[i])
+
+                    if len(features) >= maxnum:
+                        break
+
+                self.updatelist.append(Message(MessageMode.Wrong_Pred_Sample_Train,
+                                               {"x": features,
+                                                "y": correctresult,
+                                                "pred": wrongpreds}))
 
         rmlist.reverse()
         for index in rmlist:
