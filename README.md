@@ -76,7 +76,7 @@ All data coming from the modules is appended to the return list. This can occur
 at the end of the update function or from the initialRequest function. This data is handled inside DashbaordCallbacks
 and is only removed once it has been processed.
 
-Examples:
+#### Examples:
 Sending data from updates:
 ```python
 from DashboardModules.Module import Module
@@ -126,7 +126,7 @@ All modules must inherit from the base class module. This can be directly or ind
 A module must provide an init function and an update function. If necessary, initialRequest can be used as well.
 More information on these functions can be found in the Module info under Classes.
 
-Example:
+#### Example:
 ```python
 from DashboardModules.Module import Module
 
@@ -151,7 +151,7 @@ allModules["MyModule"] = MyModule
 More examples can be found by looking in DashboardModules.
 
 # Classes:
-##Dashboard
+## Dashboard
 Dashboard is a class that handles high level matplotlib interaction and sends data to sub modules.
 A dashboard is created in a seperate process and communicates using updatelist
 and returnlist. The createDashboard function makes this easier.

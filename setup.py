@@ -7,6 +7,10 @@ setup(
     author_email='robertjnies@gamil.com',
     # Needed to actually package something
     packages=['MLDashboard'],
+    install_requires=[
+        'matplotlib',
+        'tensorflow'
+    ],
     # *strongly* suggested for sharing
     version='0.0.1',
     # The license can be anything you like

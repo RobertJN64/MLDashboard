@@ -1,0 +1,18 @@
+{
+  "modules": [
+    [
+       ["LossMetricsGraph", {}],
+       ["LossMetricsNumerical", {}],
+       ["TrainingSetSampleImages",
+          {"width": 28,
+           "height": 28,
+           "rows": 2,
+           "cols": 4}]
+    ],
+    [
+       ["StatusModule", {}],
+       ["ControlButtons", {}],
+       ["EmptyModule", {}]
+    ]
+  ]
+}
