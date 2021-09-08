@@ -1,12 +1,18 @@
 # Getting Started
+
+This guide assumes you already understand python and tensorflow.
+
 ## Installation
-TODO - how to install
+```commandline
+pip install git+https://github.com/RobertJN64/MLDashboard
+```
 
 ## Integration
 The dashboard can easily by added to an existing machine learning project.
 Import the dashboard as shown.
 ```python
-from MLDashboardBackend import createDashboard, DashboardCallbacks, MessageMode, HandleRemaingCommands
+from MLDashboard.MLDashboardBackend import createDashboard, DashboardCallbacks, HandleRemaingCommands
+from MLDashboard.CommunicationBackend import Message, MessageMode
 ```
 
 Before training starts, create the dashboard.
@@ -24,12 +30,12 @@ model.fit(x_train, y_train, epochs=10,
 After training ends, you can send evaluation stats to the dashboard.
 ```python
 res = model.evaluate(x_test, y_test, batch_size=128)
-updatelist.append([MessageMode.Evaluation, dict(zip(model.metrics_names, res))])
+updatelist.append(Message(MessageMode.Evaluation, dict(zip(model.metrics_names, res))))
 ```
 
 To exit the dashboard cleanly, use the following code:
 ```python
-updatelist.append([MessageMode.End, {}])
+updatelist.append(Message(MessageMode.End, {}))
 print("Exiting cleanly...")
 dashboardProcess.join()
 print("Dashboard exited.")
@@ -79,19 +85,22 @@ and is only removed once it has been processed.
 #### Examples:
 Sending data from updates:
 ```python
-from DashboardModules.Module import Module
+from MLDashboard.DashboardModules.Module import Module
+from MLDashboard.CommunicationBackend import Message, MessageMode
+import copy
 
 class ControlButtons(Module):
     def __init__(self, ax, config):
+        """Contains buttons to stop training and save model"""
         super().__init__(ax, config, "Control Buttons", noticks=True)
         self.stopbutton = createButtonWithingAxes(self.ax, 0.2, 0.2, 0.2, 0.1, "Stop Training")
         self.savebutton = createButtonWithingAxes(self.ax, 0.5, 0.2, 0.2, 0.1, "Save Model")
         self.stopbutton.on_clicked(self.stopFunc)
         self.savebutton.on_clicked(self.saveFunc)
 
-        self.internalreturnlist = []
+        self.internalreturnlist: list[Message] = []
 
-    def update(self, data):
+    def update(self, data: Message):
         out = copy.deepcopy(self.internalreturnlist)
         self.internalreturnlist = []
         return out
@@ -99,25 +108,29 @@ class ControlButtons(Module):
     def stopFunc(self, event):
         if event == event:
             pass
-        self.internalreturnlist.append([MessageMode.Command, {'command': 'stop'}])
+        self.internalreturnlist.append(Message(MessageMode.Command, {'command': 'stop'}))
 
     def saveFunc(self, event):
         if event == event:
             pass
-        self.internalreturnlist.append([MessageMode.Command, {'command': 'save'}])
+        self.internalreturnlist.append(Message(MessageMode.Command, {'command': 'save'}))
 ```
 
 Sending data from initialRequest:
 ```python
-from DashboardModules.ImageModule import ImageModule
-from MultiprocessingBackend import MessageMode
+from MLDashboard.DashboardModules.ImageModule import ImageModule
+from MLDashboard.CommunicationBackend import Message, MessageMode
 
 class TrainingSetSampleImages(ImageModule):
     def __init__(self, ax, config):
         super().__init__(ax, config, "Training Set Sample Images")
 
     def initialRequests(self):
-        return [[MessageMode.Train_Set_Sample, {"num": self.config['rows'] * self.config['cols']}]]
+        return [Message(MessageMode.Train_Set_Sample, {"num": self.config['rows'] * self.config['cols']})]
+
+    def update(self, data):
+        if data.body == MessageMode.Train_Set_Sample:
+            print(data)
 ```
 
 # Tutorials
@@ -128,7 +141,7 @@ More information on these functions can be found in the Module info under Classe
 
 #### Example:
 ```python
-from DashboardModules.Module import Module
+from MLDashboard.DashboardModules.Module import Module
 
 class MyModule(Module):
     def __init__(self, ax, config):
@@ -143,7 +156,7 @@ class MyModule(Module):
 To register your module, add this code in your main script.
 ```python
 import MyModule
-from MLDashboardBackend import allModules
+from MLDashboard.MLDashboardBackend import allModules
 
 allModules["MyModule"] = MyModule
 ```
@@ -173,6 +186,11 @@ Functions:
 - initialRequest(): allows module to request data before dashboard loads
 
 All functions are called automatically from dashboard.
+
+## Image Module
+
+ImageModule inherits from module and contains some functions to make handling
+images easier.
 
 # Module Info
 TODO - all module info
