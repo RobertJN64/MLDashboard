@@ -12,9 +12,9 @@ setup(
         'tensorflow'
     ],
     # *strongly* suggested for sharing
-    version='0.0.1',
+    version='0.0.2',
     # The license can be anything you like
     license='MIT',
     description='Machine learning dashboard that integrates with tensorflow.',
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
 )
