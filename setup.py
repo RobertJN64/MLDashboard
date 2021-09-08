@@ -6,13 +6,13 @@ setup(
     author='Robert Nies',
     author_email='robertjnies@gamil.com',
     # Needed to actually package something
-    packages=['MLDashboard'],
+    packages=['MLDashboard', 'MLDashboard.DashboardModules', 'MLDashboard.Examples'],
     install_requires=[
         'matplotlib',
         'tensorflow'
     ],
     # *strongly* suggested for sharing
-    version='0.0.2',
+    version='0.0.3',
     # The license can be anything you like
     license='MIT',
     description='Machine learning dashboard that integrates with tensorflow.',
