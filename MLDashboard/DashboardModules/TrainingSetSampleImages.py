@@ -1,5 +1,5 @@
 from MLDashboard.DashboardModules.ImageModule import ImageModule
-from MLDashboard.CommunicationBackend import Message, MessageMode
+from MLDashboard.CommunicationBackend import MessageMode
 
 class TrainingSetSampleImages(ImageModule):
     def __init__(self, ax, config):
@@ -9,10 +9,10 @@ class TrainingSetSampleImages(ImageModule):
         :param ax: matplotlib ax
         :param config: Config info with the keys width and height for the image and rows and cols for the plot
         """
-        super().__init__(ax, config, "Training Set Sample Images")
+        super().__init__(ax, config, "Training Set Sample Images", MessageMode.Train_Set_Sample)
 
     def initialRequests(self):
-        return [Message(MessageMode.Train_Set_Sample, {"num": self.config['rows'] * self.config['cols']})]
+        return self.generateRequest()
 
     def update(self, data):
         if data.mode == MessageMode.Train_Set_Sample:
@@ -22,3 +22,4 @@ class TrainingSetSampleImages(ImageModule):
 
         elif data.mode == MessageMode.Epoch_End:
             self.updateImageGrid()
+            return self.generateRequest()

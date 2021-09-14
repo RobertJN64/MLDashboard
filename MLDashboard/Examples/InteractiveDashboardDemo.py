@@ -4,6 +4,7 @@ import tensorflow as tf
 from tensorflow import keras
 import MLDashboard.MLDashboardBackend as MLDashboardBackend
 from MLDashboard.CommunicationBackend import Message, MessageMode
+import time
 
 def get_model():
     model = keras.Sequential(
@@ -16,6 +17,7 @@ def get_model():
         loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
         metrics=["accuracy"],
     )
+
     return model
 
 def run():
@@ -43,13 +45,16 @@ def run():
     print("Creating model...")
     model = get_model()
 
+
     print("Creating callbacks...")
     #Callbacks require update and return list for communicating with dashboard
     #Model and datasets are useful for sending that data to certain modules
     callback = MLDashboardBackend.DashboardCallbacks(updatelist, returnlist, model, x_train, y_train, x_test, y_test)
 
     print("Starting training...")
+    trainingstarttime = time.time()
     model.fit(x_train, y_train, epochs=50, callbacks=[callback])
+    print("Training finished in: ", round(time.time() - trainingstarttime, 3), " seconds.")
 
     print("Evaluating model...")
     res = model.evaluate(x_test, y_test, batch_size=128)

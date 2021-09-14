@@ -7,7 +7,8 @@
           {"width": 28,
            "height": 28,
            "rows": 2,
-           "cols": 4}]
+           "cols": 4,
+           "refreshrate":  3}]
     ],
     [
        ["StatusModule", {}],
@@ -16,7 +17,8 @@
          {"width": 28,
            "height": 28,
            "rows": 2,
-           "cols": 4}]
+           "cols": 4,
+           "refreshrate": 5}]
     ]
   ]
 }

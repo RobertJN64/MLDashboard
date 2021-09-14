@@ -249,33 +249,37 @@ class DashboardCallbacks(Callback):
         for index, item in enumerate(self.returnlist):
             if item.mode == MessageMode.Train_Set_Sample:
                 rmlist.append(index)
-                num = item.body["num"]
-                x = self.x_train[0:num]
-                y = self.y_train[0:num]
+                start = item.body["startingindex"]
+                num = item.body["num"] + start
+                x = self.x_train[start:num]
+                y = self.y_train[start:num]
                 self.updatelist.append(Message(MessageMode.Train_Set_Sample, {"x": x, "y": y}))
 
             elif item.mode == MessageMode.Test_Set_Sample:
                 rmlist.append(index)
-                num = item.body["num"]
-                x = self.x_test[0:num]
-                y = self.y_test[0:num]
+                start = item.body["startingindex"]
+                num = item.body["num"] + start
+                x = self.x_test[start:num]
+                y = self.y_test[start:num]
                 self.updatelist.append(Message(MessageMode.Test_Set_Sample, {"x": x, "y": y}))
 
             elif item.mode == MessageMode.Pred_Sample:
                 rmlist.append(index)
-                num = item.body["num"]
+                start = item.body["startingindex"]
+                num = item.body["num"] + start
                 self.updatelist.append(Message(MessageMode.Pred_Sample,
-                                               {"x": self.x_test[0:num],
-                                                "y": self.y_test[0:num],
-                                                "pred": self.model.predict(self.x_test[0:num])}))
+                                               {"x": self.x_test[start:num],
+                                                "y": self.y_test[start:num],
+                                                "pred": self.model.predict(self.x_test[start:num])}))
 
             elif item.mode == MessageMode.Pred_Sample_Train:
                 rmlist.append(index)
-                num = item.body["num"]
+                start = item.body["startingindex"]
+                num = item.body["num"] + start
                 self.updatelist.append(Message(MessageMode.Pred_Sample_Train,
-                                               {"x": self.x_train[0:num],
-                                                "y": self.y_train[0:num],
-                                                "pred": self.model.predict(self.x_train[0:num])}))
+                                               {"x": self.x_train[start:num],
+                                                "y": self.y_train[start:num],
+                                                "pred": self.model.predict(self.x_train[start:num])}))
 
             elif item.mode == MessageMode.Wrong_Pred_Sample:
                 rmlist.append(index)
