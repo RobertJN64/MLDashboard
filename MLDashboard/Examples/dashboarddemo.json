@@ -12,7 +12,11 @@
     [
        ["StatusModule", {}],
        ["ControlButtons", {}],
-       ["EmptyModule", {}]
+       ["PredImages",
+         {"width": 28,
+           "height": 28,
+           "rows": 2,
+           "cols": 4}]
     ]
   ]
 }

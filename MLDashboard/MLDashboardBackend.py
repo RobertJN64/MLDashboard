@@ -4,6 +4,7 @@ from MLDashboard.DashboardModules.LossMetricsNumerical import LossMetricsNumeric
 from MLDashboard.DashboardModules.StatusModule import StatusModule
 from MLDashboard.DashboardModules.ControlButtons import ControlButtons
 from MLDashboard.DashboardModules.TrainingSetSampleImages import TrainingSetSampleImages
+from MLDashboard.DashboardModules.PredImages import PredImages
 from MLDashboard.DashboardModules.EmptyModule import EmptyModule
 from MLDashboard.DashboardModules.Module import Module
 
@@ -21,6 +22,7 @@ allModules = {'LossMetricsGraph': LossMetricsGraph,
               'StatusModule': StatusModule,
               'ControlButtons': ControlButtons,
               'TrainingSetSampleImages': TrainingSetSampleImages,
+              'PredImages': PredImages,
               'EmptyModule': EmptyModule}
 
 def dashboardProcess(configjson: dict, updatelist: list, returnlist: list):
@@ -195,12 +197,13 @@ def handleCommands(returnlist: list[Message], model, allowstop=True):
                 print("Model manually saved.")
                 model.save(input("File name: "))
 
+
     rmlist.reverse()
     for index in rmlist:
         returnlist.pop(index)
 
 
-def HandleRemaingCommands(returnlist: list[Message], model):
+def HandleRemaingCommands(returnlist: list[Message], model): #TODO - handle remaining data requests
     """
     This should be called after the dashboard exits.
     :param returnlist: returnlist from dashboard creation

@@ -9,7 +9,10 @@ class ImageModule(Module):
             self.config['conversion'] = 'L' #grayscale
         if 'cmap' not in self.config:
             self.config['cmap'] = 'gray'
-        self.aximages = []
+        self.axes = []
+        self.text = []
+        self.imgs = []
+
 
     def createImages(self, rawdata):
         images = []
@@ -19,30 +22,54 @@ class ImageModule(Module):
             images.append(img.convert(self.config['conversion']))
         return images
 
-    def displayImageGrid(self, imgs, text):
-        #get bounding box of main axes
-        b = self.ax.get_position()
-        x = b.x0
-        y = b.y0
-        width = b.width
-        height = b.height
+    def updateImageGrid(self, imgs = None, text = None):
+        """Will not rerender unless it is necessary."""
+        if imgs is None:
+            imgs = self.imgs
+        if text is None:
+            text = self.text
 
-        rows = self.config['rows']
-        cols = self.config['cols']
+        if len(imgs) > 0:
+            b = self.ax.get_position()
+            x = b.x0
+            y = b.y0
+            width = b.width
+            height = b.height
 
-        imgwidth = (width / cols)
-        imgheight = (height / rows)
+            rows = self.config['rows']
+            cols = self.config['cols']
 
-        ypos = y
-        for row in range(0, rows):
-            xpos = x
-            for col in range(0, cols):
-                self.aximages.append(self.displayImage(xpos + imgwidth/6, ypos + imgheight/8, imgwidth/1.5, imgheight/1.5,
-                                                       imgs[col + row*cols], text[col + row*cols]))
-                xpos += imgwidth
-            ypos += imgheight
+            imgwidth = (width / cols)
+            imgheight = (height / rows)
 
-    def displayImage(self, x, y, width, height, img, text, textcolor='black'):
+            counter = 0
+            ypos = y
+            for row in range(0, rows):
+                xpos = x
+                for col in range(0, cols):
+                    if counter >= len(self.axes):
+                        self.axes.append(self.displayImage(xpos + imgwidth / 6, ypos + imgheight / 8, imgwidth / 1.5,
+                                                           imgheight / 1.5, imgs[counter], text[counter]))
+                    else:
+                        b2 = self.axes[counter].get_position()
+                        if abs(b2.x0 - (xpos + imgwidth / 6)) > 0.001 and abs(b2.y0 - (ypos + imgheight / 8)) > 0.001:
+                            self.axes[counter].set_position(
+                                (xpos + imgwidth / 6, ypos + imgheight / 8, imgwidth / 1.5, imgheight / 1.5))
+
+                        if text[counter] != self.text[counter]:
+                            self.axes[counter].set_title(text[counter])
+                        if list(imgs[counter].getdata()) != list(self.imgs[counter].getdata()):
+                            self.axes[counter].imshow(imgs[counter], cmap=self.config['cmap'])
+
+                    counter += 1
+                    xpos += imgwidth
+                ypos += imgheight
+
+        self.imgs = imgs
+        self.text = text
+
+
+    def displayImage(self, x, y, width, height, img, text, textcolor='black'): #TODO - handle text color
         #imshow will only shrink and resize axes
         fig = self.ax.get_figure()
         ax = fig.add_axes((x, y, width, height))
@@ -51,27 +78,3 @@ class ImageModule(Module):
                                 labelbottom=False, right=False, left=False, labelleft=False)
         ax.set_title(text, color=textcolor)
         return ax
-
-    def recalcImageBoxes(self):
-        b = self.ax.get_position()
-        x = b.x0
-        y = b.y0
-        width = b.width
-        height = b.height
-
-        rows = self.config['rows']
-        cols = self.config['cols']
-
-        imgwidth = (width / cols)
-        imgheight = (height / rows)
-
-        counter = 0
-        ypos = y
-        for row in range(0, rows):
-            xpos = x
-            for col in range(0, cols):
-                self.aximages[counter].set_position((xpos + imgwidth/6, ypos + imgheight/8, imgwidth/1.5, imgheight/1.5))
-                counter += 1
-                xpos += imgwidth
-            ypos += imgheight
-
