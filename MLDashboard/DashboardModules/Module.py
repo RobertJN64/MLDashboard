@@ -15,6 +15,7 @@ class Module:
         self.ax = ax
         self.config = config
         self.ax.set_title(title)
+
         if noticks:
             self.ax.tick_params(axis='both', which='both', bottom=False, top=False,
                                 labelbottom=False, right=False, left=False, labelleft=False)

@@ -9,7 +9,8 @@ setup(
     packages=['MLDashboard', 'MLDashboard.DashboardModules', 'MLDashboard.Examples'],
     install_requires=[
         'matplotlib',
-        'tensorflow'
+        'tensorflow',
+        'pillow'
     ],
     # *strongly* suggested for sharing
     version='0.0.3',

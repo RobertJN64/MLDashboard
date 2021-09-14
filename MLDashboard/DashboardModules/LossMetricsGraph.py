@@ -45,4 +45,5 @@ class LossMetricsGraph(Module):
             else:
                 ticks.append(ticks[-1] * 2 - ticks[-2])
             self.ax.set_xticks(ticks)
+            self.ax.set_xlim(right=ticks[-1]+1)
 

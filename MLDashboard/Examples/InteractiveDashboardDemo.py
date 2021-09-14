@@ -49,7 +49,7 @@ def run():
     callback = MLDashboardBackend.DashboardCallbacks(updatelist, returnlist, model, x_train, y_train, x_test, y_test)
 
     print("Starting training...")
-    model.fit(x_train, y_train, epochs=10, callbacks=[callback])
+    model.fit(x_train, y_train, epochs=20, callbacks=[callback])
 
     print("Evaluating model...")
     res = model.evaluate(x_test, y_test, batch_size=128)

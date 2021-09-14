@@ -15,5 +15,11 @@ class TrainingSetSampleImages(ImageModule):
         return [Message(MessageMode.Train_Set_Sample, {"num": self.config['rows'] * self.config['cols']})]
 
     def update(self, data):
-        if data.body == MessageMode.Train_Set_Sample:
-            print(data)
+        if data.mode == MessageMode.Train_Set_Sample:
+            images = self.createImages(data.body['x'])
+            text = data.body['y']
+            self.displayImageGrid(images, text)
+            #for i in range(0, len(images)):
+                #images[i].save('tmpimagefolder/' + str(i) + '-' + str(data.body['y'][i]) + '.png')
+        elif data.mode == MessageMode.Epoch_End:
+            self.recalcImageBoxes()

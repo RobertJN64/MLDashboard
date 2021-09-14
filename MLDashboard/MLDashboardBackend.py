@@ -105,6 +105,8 @@ class Dashboard:
 
 
         self.fig = pyplot.figure()
+        figManager = pyplot.get_current_fig_manager()
+        figManager.window.state('zoomed')
         self.fig.suptitle("Tensorflow Dashboard")
         self.fig.canvas.manager.set_window_title("Tensorflow Dashboard")
         self.fig.set_tight_layout(True)
@@ -149,6 +151,7 @@ class Dashboard:
         self.currentmode = 'Post Training View'
         for module in self.modulelist:
             self.updateModule(module, Message(MessageMode.End, {}))
+
         pyplot.show()
         for module in self.modulelist:
             req = module.update(Message(MessageMode.End, {}))
