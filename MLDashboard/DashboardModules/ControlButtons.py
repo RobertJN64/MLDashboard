@@ -1,5 +1,5 @@
 from MLDashboard.DashboardModules.Module import Module
-from MLDashboard.CommunicationBackend import Message, MessageMode
+from MLDashboard.MLCommunicationBackend import Message, MessageMode
 import matplotlib.pyplot as pyplot
 from matplotlib.widgets import Button
 from mpl_toolkits.axes_grid1.inset_locator import InsetPosition

@@ -3,7 +3,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' #stops agressive error message printing
 import tensorflow as tf
 from tensorflow import keras
 import MLDashboard.MLDashboardBackend as MLDashboardBackend
-from MLDashboard.CommunicationBackend import Message, MessageMode
+import MLDashboard.MLCallbacksBackend as MLCallbacksBackend
+from MLDashboard.MLCommunicationBackend import Message, MessageMode
 import time
 
 def get_model():
@@ -49,7 +50,9 @@ def run():
     print("Creating callbacks...")
     #Callbacks require update and return list for communicating with dashboard
     #Model and datasets are useful for sending that data to certain modules
-    callback = MLDashboardBackend.DashboardCallbacks(updatelist, returnlist, model, x_train, y_train, x_test, y_test)
+    config = MLCallbacksBackend.CallbackConfig()
+    callback = MLCallbacksBackend.DashboardCallbacks(updatelist, returnlist, model, x_train, y_train,
+                                                     x_test, y_test, config)
 
     print("Starting training...")
     trainingstarttime = time.time()
@@ -57,16 +60,14 @@ def run():
     print("Training finished in: ", round(time.time() - trainingstarttime, 3), " seconds.")
 
     print("Evaluating model...")
-    res = model.evaluate(x_test, y_test, batch_size=128)
-    #This data is sent to the dashboard
-    updatelist.append(Message(MessageMode.Evaluation, dict(zip(model.metrics_names, res))))
+    model.evaluate(x_test, y_test, batch_size=128, callbacks=[callback])
 
     updatelist.append(Message(MessageMode.End, {}))
     print("Exiting cleanly...")
     dashboardProcess.join()
     print("Dashboard exited.")
     #This handles any extra data that the dashboard sent, such as save commands
-    MLDashboardBackend.HandleRemaingCommands(returnlist, model)
+    callback.HandleRemaingCommands()
 
 if __name__ == '__main__':
     run()

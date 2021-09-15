@@ -1,5 +1,5 @@
 from MLDashboard.DashboardModules.ImageModule import ImageModule
-from MLDashboard.CommunicationBackend import MessageMode
+from MLDashboard.MLCommunicationBackend import MessageMode
 
 class TrainingSetSampleImages(ImageModule):
     def __init__(self, ax, config):

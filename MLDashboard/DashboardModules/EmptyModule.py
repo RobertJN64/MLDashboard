@@ -1,5 +1,5 @@
 from MLDashboard.DashboardModules.Module import Module
-from MLDashboard.CommunicationBackend import Message
+from MLDashboard.MLCommunicationBackend import Message
 
 class EmptyModule(Module):
     def __init__(self, ax, config):

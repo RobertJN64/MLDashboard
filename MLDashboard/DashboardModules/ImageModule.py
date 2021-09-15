@@ -1,5 +1,5 @@
 from MLDashboard.DashboardModules.Module import Module
-from MLDashboard.CommunicationBackend import Message
+from MLDashboard.MLCommunicationBackend import Message
 from PIL import Image
 
 def compareImages(imga, imgb):

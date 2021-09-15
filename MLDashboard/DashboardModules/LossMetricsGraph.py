@@ -1,5 +1,5 @@
 from MLDashboard.DashboardModules.Module import Module
-from MLDashboard.CommunicationBackend import Message, MessageMode
+from MLDashboard.MLCommunicationBackend import Message, MessageMode
 
 class LossMetricsGraph(Module):
     """Graph showing current loss, accuracy, and other metrics."""

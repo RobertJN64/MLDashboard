@@ -1,4 +1,4 @@
-from MLDashboard.CommunicationBackend import Message
+from MLDashboard.MLCommunicationBackend import Message
 import warnings
 
 class Module:

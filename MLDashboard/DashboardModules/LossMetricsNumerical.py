@@ -1,5 +1,5 @@
 from MLDashboard.DashboardModules.Module import Module
-from MLDashboard.CommunicationBackend import Message, MessageMode
+from MLDashboard.MLCommunicationBackend import Message, MessageMode
 import warnings
 
 class LossMetricsNumerical(Module):
@@ -31,7 +31,7 @@ class LossMetricsNumerical(Module):
                     warnings.warn("Too many keys in loss metrics info.")
                     break
 
-        elif data.mode == MessageMode.Evaluation:
+        elif data.mode == MessageMode.Test_End:
             self.epochtext.set_text("Training stats:")
             self.pos -= 1
             self.ax.text(1, self.pos, "Testing stats:")

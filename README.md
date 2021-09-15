@@ -10,9 +10,10 @@ pip install git+https://github.com/RobertJN64/MLDashboard
 ## Integration
 The dashboard can easily by added to an existing machine learning project.
 Import the dashboard as shown.
+
 ```python
 from MLDashboard.MLDashboardBackend import createDashboard, DashboardCallbacks, HandleRemaingCommands
-from MLDashboard.CommunicationBackend import Message, MessageMode
+from MLDashboard.MLCommunicationBackend import Message, MessageMode
 ```
 
 Before training starts, create the dashboard.
@@ -84,10 +85,12 @@ and is only removed once it has been processed.
 
 #### Examples:
 Sending data from updates:
+
 ```python
 from MLDashboard.DashboardModules.Module import Module
-from MLDashboard.CommunicationBackend import Message, MessageMode
+from MLDashboard.MLCommunicationBackend import Message, MessageMode
 import copy
+
 
 class ControlButtons(Module):
     def __init__(self, ax, config):
@@ -117,9 +120,11 @@ class ControlButtons(Module):
 ```
 
 Sending data from initialRequest:
+
 ```python
 from MLDashboard.DashboardModules.ImageModule import ImageModule
-from MLDashboard.CommunicationBackend import Message, MessageMode
+from MLDashboard.MLCommunicationBackend import Message, MessageMode
+
 
 class TrainingSetSampleImages(ImageModule):
     def __init__(self, ax, config):
