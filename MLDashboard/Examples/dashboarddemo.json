@@ -18,7 +18,9 @@
            "height": 28,
            "rows": 2,
            "cols": 4,
-           "refreshrate": 5}]
+           "refreshrate": 5,
+           "correctcolor": "blue",
+           "incorrectcolor": "orange"}]
     ]
   ]
 }

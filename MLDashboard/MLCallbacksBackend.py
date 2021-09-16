@@ -1,6 +1,8 @@
 from MLDashboard.MLCommunicationBackend import Message, MessageMode
 from tensorflow.keras.callbacks import Callback
+import numpy as np
 import warnings
+
 
 class CallbackConfig:
     """Customize when data is send to the dashboard"""
@@ -28,7 +30,7 @@ class CallbackConfig:
 #region Callbacks
 class DashboardCallbacks(Callback):
     def __init__(self, updatelist: list[Message], returnlist: list[Message], model, x_train, y_train, x_test, y_test,
-                 config: CallbackConfig):
+                 prediction_labels, config: CallbackConfig):
         """
         This inherits from Tensorflow callbacks and connects the model training to the dashboard. Can be customized
         by overriding the custom_on functions.
@@ -40,6 +42,7 @@ class DashboardCallbacks(Callback):
         :param y_train: Training set output
         :param x_test: Test set features
         :param y_test: Test set output
+        :param prediction_labels: Allows images to be labeled with friendly text
         :param config: Customize when data is sent
         """
 
@@ -51,9 +54,24 @@ class DashboardCallbacks(Callback):
         self.y_train = y_train
         self.x_test = x_test
         self.y_test = y_test
+
+        self.predictionlabels = prediction_labels
+
         self.config = config
 
         self.handleDataRequest()
+
+    def label(self, data):
+        labels = []
+        for item in data:
+            labels.append(self.predictionlabels[item])
+        return labels
+
+    def predlabel(self, data):
+        labels = []
+        for item in data:
+            labels.append(self.predictionlabels[np.argmax(item)])
+        return labels
 
     # on epoch begin
     def handleDataRequest(self):
@@ -65,7 +83,7 @@ class DashboardCallbacks(Callback):
                 num = item.body["num"] + start
                 x = self.x_train[start:num]
                 y = self.y_train[start:num]
-                self.updatelist.append(Message(MessageMode.Train_Set_Sample, {"x": x, "y": y}))
+                self.updatelist.append(Message(MessageMode.Train_Set_Sample, {"x": x, "y": self.label(y)}))
 
             elif item.mode == MessageMode.Test_Set_Sample:
                 rmlist.append(index)
@@ -73,7 +91,7 @@ class DashboardCallbacks(Callback):
                 num = item.body["num"] + start
                 x = self.x_test[start:num]
                 y = self.y_test[start:num]
-                self.updatelist.append(Message(MessageMode.Test_Set_Sample, {"x": x, "y": y}))
+                self.updatelist.append(Message(MessageMode.Test_Set_Sample, {"x": x, "y": self.label(y)}))
 
             elif item.mode == MessageMode.Pred_Sample:
                 rmlist.append(index)
@@ -81,8 +99,8 @@ class DashboardCallbacks(Callback):
                 num = item.body["num"] + start
                 self.updatelist.append(Message(MessageMode.Pred_Sample,
                                                {"x": self.x_test[start:num],
-                                                "y": self.y_test[start:num],
-                                                "pred": self.model.predict(self.x_test[start:num])}))
+                                                "y": self.label(self.y_test[start:num]),
+                                                "pred": self.predlabel(self.model.predict(self.x_test[start:num]))}))
 
             elif item.mode == MessageMode.Pred_Sample_Train:
                 rmlist.append(index)
@@ -90,8 +108,8 @@ class DashboardCallbacks(Callback):
                 num = item.body["num"] + start
                 self.updatelist.append(Message(MessageMode.Pred_Sample_Train,
                                                {"x": self.x_train[start:num],
-                                                "y": self.y_train[start:num],
-                                                "pred": self.model.predict(self.x_train[start:num])}))
+                                                "y": self.label(self.y_train[start:num]),
+                                                "pred": self.predlabel(self.model.predict(self.x_train[start:num]))}))
 
             elif item.mode == MessageMode.Wrong_Pred_Sample:
                 rmlist.append(index)
@@ -113,8 +131,8 @@ class DashboardCallbacks(Callback):
 
                 self.updatelist.append(Message(MessageMode.Wrong_Pred_Sample,
                                                {"x": features,
-                                                "y": correctresult,
-                                                "pred": wrongpreds}))
+                                                "y": self.label(correctresult),
+                                                "pred": self.predlabel(wrongpreds)}))
 
             elif item.mode == MessageMode.Wrong_Pred_Sample_Train:
                 rmlist.append(index)
@@ -136,8 +154,8 @@ class DashboardCallbacks(Callback):
 
                 self.updatelist.append(Message(MessageMode.Wrong_Pred_Sample_Train,
                                                {"x": features,
-                                                "y": correctresult,
-                                                "pred": wrongpreds}))
+                                                "y": self.label(correctresult),
+                                                "pred": self.predlabel(wrongpreds)}))
 
         rmlist.reverse()
         for index in rmlist:

@@ -10,10 +10,11 @@ setup(
     install_requires=[
         'matplotlib',
         'tensorflow',
+        'numpy',
         'pillow'
     ],
     # *strongly* suggested for sharing
-    version='0.0.3',
+    version='0.0.4',
     # The license can be anything you like
     license='MIT',
     description='Machine learning dashboard that integrates with tensorflow.',

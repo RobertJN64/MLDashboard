@@ -1,28 +1,22 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' #stops agressive error message printing
 import tensorflow as tf
-from tensorflow import keras
 import MLDashboard.MLDashboardBackend as MLDashboardBackend
 import MLDashboard.MLCallbacksBackend as MLCallbacksBackend
 from MLDashboard.MLCommunicationBackend import Message, MessageMode
 import time
+from InteractiveDashboardDemo import get_model
 
-def get_model():
-    model = keras.Sequential(
-        [keras.layers.Dense(128, activation='relu'),
-         keras.layers.Dense(10)]
-    )
+class myCustomCallback(MLCallbacksBackend.DashboardCallbacks):
+    def __init__(self, updatelist, returnlist, model, x_train, y_train, x_test, y_test, labels, config):
+        super().__init__(updatelist, returnlist, model, x_train, y_train, x_test, y_test, labels, config)
 
-    model.compile(
-        optimizer='adam',
-        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-        metrics=["accuracy"],
-    )
+    def custom_on_test_begin(self, logs):
+        print("We are beginning the evaluation step.")
 
-    return model
 
 def run():
-    print("Starting interactive dashboard demo...")
+    print("Starting custom callbacks demo...")
     print("Setting up dashboard...")
 
     #Create dashboard and return communication tools (this starts the process)
@@ -47,17 +41,16 @@ def run():
     model = get_model()
 
 
-    print("Creating callbacks...")
+    print("Creating custom callbacks...")
     #Callbacks require update and return list for communicating with dashboard
     #Model and datasets are useful for sending that data to certain modules
     config = MLCallbacksBackend.CallbackConfig()
-    labels = list(range(0,10))
-    callback = MLCallbacksBackend.DashboardCallbacks(updatelist, returnlist, model, x_train, y_train,
-                                                     x_test, y_test, labels, config)
+    labels = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+    callback = myCustomCallback(updatelist, returnlist, model, x_train, y_train, x_test, y_test, labels, config)
 
     print("Starting training...")
     trainingstarttime = time.time()
-    model.fit(x_train, y_train, epochs=50, callbacks=[callback])
+    model.fit(x_train, y_train, epochs=20, callbacks=[callback])
     print("Training finished in: ", round(time.time() - trainingstarttime, 3), " seconds.")
 
     print("Evaluating model...")

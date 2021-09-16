@@ -123,7 +123,7 @@ class ImageModule(Module):
                             self.axes[counter].set_position((xcoord, ycoord, truewidth, trueheight))
 
                         if text[counter] != self.text[counter]:
-                            self.axes[counter].set_title(text[counter])
+                            self.axes[counter].set_title(text[counter], color=color[counter])
                         if not compareImages(imgs[counter], self.imgs[counter]):
                             self.axes[counter].imshow(imgs[counter], cmap=self.config['cmap'])
 
