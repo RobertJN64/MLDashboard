@@ -21,7 +21,6 @@ class PredImages(ImageModule):
             images = self.createImages(data.body['x'])
             text = []
             color = []
-            print(data.body['pred'][0])
             for i in range(0, len(images)):
                 text.append(str(data.body['pred'][i]) + " : " + str(data.body['y'][i]))
                 if str(data.body['pred'][i]) == str(data.body['y'][i]):

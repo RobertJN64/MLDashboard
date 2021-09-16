@@ -5,6 +5,7 @@ from MLDashboard.DashboardModules.StatusModule import StatusModule
 from MLDashboard.DashboardModules.ControlButtons import ControlButtons
 from MLDashboard.DashboardModules.TrainingSetSampleImages import TrainingSetSampleImages
 from MLDashboard.DashboardModules.PredImages import PredImages
+from MLDashboard.DashboardModules.WrongPredImages import WrongPredImages
 from MLDashboard.DashboardModules.EmptyModule import EmptyModule
 from MLDashboard.DashboardModules.Module import Module
 
@@ -21,6 +22,7 @@ allModules = {'LossMetricsGraph': LossMetricsGraph,
               'ControlButtons': ControlButtons,
               'TrainingSetSampleImages': TrainingSetSampleImages,
               'PredImages': PredImages,
+              'WrongPredImages': WrongPredImages,
               'EmptyModule': EmptyModule}
 
 def dashboardProcess(configjson: dict, updatelist: list, returnlist: list):

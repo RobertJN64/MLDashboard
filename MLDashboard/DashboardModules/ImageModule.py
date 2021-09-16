@@ -61,10 +61,10 @@ class ImageModule(Module):
         self.refreshtimer += 1
         return False
 
-    def generateRequest(self):
+    def generateRequest(self, attempts=None):
         if self.shouldRequest():
             num = self.config['rows'] * self.config['cols']
-            d = {"num": num, "startingindex": self.imgcounter}
+            d = {"num": num, "startingindex": self.imgcounter, "attempts": attempts}
             self.imgcounter += num
             return [Message(self.datarequesttype, d)]
 
