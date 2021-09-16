@@ -31,6 +31,7 @@ class ImageModule(Module):
         self.axes = []
         self.text = []
         self.imgs = []
+        self.isclear = []
 
         self.refreshtimer = 0
         self.initreq = False
@@ -116,16 +117,26 @@ class ImageModule(Module):
                     trueheight = imgheight / 1.5
 
                     if counter >= len(self.axes):
-                        self.axes.append(self.displayImage(xcoord, ycoord, truewidth, trueheight,
-                                                           imgs[counter], text[counter], color[counter]))
+                        if counter < len(imgs):
+                            self.axes.append(self.displayImage(xcoord, ycoord, truewidth, trueheight,
+                                                               imgs[counter], text[counter], color[counter]))
+                            self.isclear.append(False)
                     else:
                         if rerender:
                             self.axes[counter].set_position((xcoord, ycoord, truewidth, trueheight))
 
-                        if text[counter] != self.text[counter]:
-                            self.axes[counter].set_title(text[counter], color=color[counter])
-                        if not compareImages(imgs[counter], self.imgs[counter]):
-                            self.axes[counter].imshow(imgs[counter], cmap=self.config['cmap'])
+                        if counter < len(imgs):
+                            if counter >= len(self.text) or text[counter] != self.text[counter]:
+                                self.axes[counter].set_title(text[counter], color=color[counter]) #TODO - tables
+                            if counter >= len(self.imgs) or not compareImages(imgs[counter], self.imgs[counter]):
+                                self.axes[counter].imshow(imgs[counter], cmap=self.config['cmap'])
+                                self.isclear[counter] = False
+                                self.axes[counter].axis('on')
+                        else:
+                            if not self.isclear[counter]:
+                                self.axes[counter].clear()
+                                self.isclear[counter] = True
+                                self.axes[counter].axis('off')
 
                     counter += 1
                     xpos += imgwidth

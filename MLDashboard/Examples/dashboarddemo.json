@@ -3,30 +3,18 @@
     [
        ["LossMetricsGraph", {}],
        ["LossMetricsNumerical", {}],
-       ["TrainingSetSampleImages",
-          {"width": 28,
-           "height": 28,
-           "rows": 2,
-           "cols": 4,
-           "refreshrate":  3}]
+       ["TrainingSetSampleImages", {"refreshrate":  3}]
     ],
     [
        ["StatusModule", {}],
-       ["WrongPredImages",
-            {"width": 28,
-             "height": 28,
-             "rows": 2,
-             "cols": 4,
-             "refreshrate": 5}],
-
-       ["PredImages",
-         {"width": 28,
+       ["WrongPredImages", {"refreshrate": 5}],
+       ["PredImages", {"refreshrate": 5}]
+    ]
+  ],
+  "config": {"width": 28,
            "height": 28,
            "rows": 2,
            "cols": 4,
-           "refreshrate": 5,
            "correctcolor": "blue",
-           "incorrectcolor": "orange"}]
-    ]
-  ]
+           "incorrectcolor": "orange"}
 }

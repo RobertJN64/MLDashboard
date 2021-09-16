@@ -173,7 +173,8 @@ class DashboardCallbacks(Callback):
         self.handleCommands(allowstop=False)
         if len(self.returnlist) > 0:
             warnings.warn("We couldn't handle these remaining requests: ")
-            print(self.returnlist)
+        for req in self.returnlist:
+            print(req)
 
     #region callbacks
     def on_train_begin(self, logs=None):

@@ -114,7 +114,12 @@ class Dashboard:
         self.fig.set_tight_layout(True)
         for i, module in enumerate(moduleclasslist):
             ax = self.fig.add_subplot(self.height, self.width, i+1)
-            m = module(ax, moduleconfiglist[i])
+            c = moduleconfiglist[i]
+            if 'config' in self.configjson:
+                for key, value in self.configjson['config'].items():
+                    if key not in c:
+                        c[key] = value
+            m = module(ax, c)
             addRequests(m.initialRequests(), self.returnlist)
             self.modulelist.append(m)
 

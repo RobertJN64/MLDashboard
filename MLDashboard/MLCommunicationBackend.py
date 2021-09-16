@@ -1,10 +1,4 @@
-class Message:
-    def __init__(self, mode: int, body: dict):
-        self.mode = mode
-        self.body = body
-
-    def __repr__(self):
-        return "Message with mode: " + str(self.mode) + " and data payload: " + str(self.body) + " At location: " + object.__repr__(self)
+import warnings
 
 class MessageMode:
     #control characters
@@ -39,3 +33,18 @@ class MessageMode:
     Pred_Sample_Train = 33
     Wrong_Pred_Sample = 34 #from test set
     Wrong_Pred_Sample_Train = 35
+
+def getMode(x: int):
+    for y in [a for a in dir(MessageMode) if not a.startswith('__')]:
+        if MessageMode().__getattribute__(y) == x:
+            return y
+    warnings.warn("No valid mode found.")
+
+class Message:
+    def __init__(self, mode: int, body: dict):
+        self.mode = mode
+        self.body = body
+
+    def __repr__(self):
+        return ("Message with mode: " + getMode(self.mode) + " and data payload: " + str(self.body) +
+                " At location: " + object.__repr__(self))
