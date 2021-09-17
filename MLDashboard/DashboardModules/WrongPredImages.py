@@ -10,11 +10,9 @@ class WrongPredImages(ImageModule):
         :param config: Config info with the keys width and height for the image and rows and cols for the plot
         """
         super().__init__(ax, config, "Incorrect Predictions", MessageMode.Wrong_Pred_Sample)
-        if "correctcolor" not in self.config:
-            self.config['correctcolor'] = 'green'
-        if "incorrectcolor" not in self.config:
-            self.config['incorrectcolor'] = 'red'
-
+        for key, value in {'correctcolor': 'green', 'incorrectcolor': 'red', 'attempts': 1000}.items():
+            if key not in self.config:
+                self.config[key] = value
 
     def update(self, data):
         if data.mode == MessageMode.Wrong_Pred_Sample:
@@ -28,4 +26,4 @@ class WrongPredImages(ImageModule):
 
         elif data.mode == MessageMode.Epoch_End:
             self.updateImageGrid()
-            return self.generateRequest(attempts=1000)
+            return self.generateRequest(attempts=self.config['attempts'])

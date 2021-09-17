@@ -29,6 +29,7 @@ class ImageModule(Module):
 
         #storage to quickly swap images
         self.axes = []
+        self.axtables = []
         self.text = []
         self.imgs = []
         self.isclear = []
@@ -118,8 +119,10 @@ class ImageModule(Module):
 
                     if counter >= len(self.axes):
                         if counter < len(imgs):
-                            self.axes.append(self.displayImage(xcoord, ycoord, truewidth, trueheight,
-                                                               imgs[counter], text[counter], color[counter]))
+                            ax, table = self.displayImage(xcoord, ycoord, truewidth, trueheight,
+                                                               imgs[counter], text[counter], color[counter])
+                            self.axes.append(ax)
+                            self.axtables.append(table)
                             self.isclear.append(False)
                     else:
                         if rerender:
@@ -127,7 +130,10 @@ class ImageModule(Module):
 
                         if counter < len(imgs):
                             if counter >= len(self.text) or text[counter] != self.text[counter]:
-                                self.axes[counter].set_title(text[counter], color=color[counter]) #TODO - tables
+                                t = self.axtables[counter][0,0].get_text()
+                                t.set_text(text[counter])
+                                t.set_color(color[counter])
+                                t.set_fontsize(12) #this gets auto scaled down
                             if counter >= len(self.imgs) or not compareImages(imgs[counter], self.imgs[counter]):
                                 self.axes[counter].imshow(imgs[counter], cmap=self.config['cmap'])
                                 self.isclear[counter] = False
@@ -153,5 +159,10 @@ class ImageModule(Module):
         ax.imshow(img, cmap=self.config['cmap'])
         ax.tick_params(axis='both', which='both', bottom=False, top=False,
                                 labelbottom=False, right=False, left=False, labelleft=False)
-        ax.set_title(text, color=textcolor)
-        return ax
+
+        table = ax.table([[text]], loc='top', colWidths=[1.4], cellLoc='center')
+        table[0,0].get_text().set_color(textcolor)
+        table[0, 0].set_height(0.2)
+        table[0,0].get_text().set_fontsize(12)  # this gets auto scaled down
+        table[0,0].set_linewidth(0)
+        return ax, table

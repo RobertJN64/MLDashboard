@@ -14,7 +14,7 @@ setup(
         'pillow'
     ],
     # *strongly* suggested for sharing
-    version='0.1.0',
+    version='0.1.1',
     # The license can be anything you like
     license='MIT',
     description='Machine learning dashboard that integrates with tensorflow. Great for monitoring training. Has tools for classification and images.',

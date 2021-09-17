@@ -52,6 +52,7 @@ def run():
     #Model and datasets are useful for sending that data to certain modules
     config = MLCallbacksBackend.CallbackConfig()
     labels = list(range(0,10))
+    #labels = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
     callback = MLCallbacksBackend.DashboardCallbacks(updatelist, returnlist, model, x_train, y_train,
                                                      x_test, y_test, labels, config)
 
