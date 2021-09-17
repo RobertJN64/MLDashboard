@@ -5,7 +5,7 @@ Dashboards are created based on .json config files.
 These files look like this:
 ```python
 {
-    "modules":[
+    "modules": [
         [
             ["LossMetricsGraph", {}],
             ["LossMetricsNumerical", {}]
@@ -51,7 +51,7 @@ Configuration can also be passed to all modules by adding it into the main json.
 {
     "modules":[
         [
-          ["TrainingSetSampleImages",{}]
+          ["TrainingSetSampleImages",{}],
           ["WrongPredImages", {}]
         ],
     ],
