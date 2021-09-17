@@ -136,9 +136,9 @@ if __name__ == '__main__':
 ```
 
 ## Other guides:
- - [Customizing the Dashboard](Guides/Customization.md)
- - [Creating a Custom Module](Guides/CustomModule.md)
- - [Creating Custom Callbacks (advanced)](Guides/CustomCallbacks.md)
+ - [Customizing the Dashboard](MLDashboard/Guides/Customization.md)
+ - [Creating a Custom Module](MLDashboard/Guides/CustomModule.md)
+ - [Creating Custom Callbacks (advanced)](MLDashboard/Guides/CustomCallbacks.md)
  - [Module Documentation]
  - [Data Structure Documentation]
  - [Primary Functions Documentation]
@@ -209,8 +209,6 @@ class TrainingSetSampleImages(ImageModule):
             print(data)
 ```
 
-# Tutorials
-
 
 # Classes:
 ## Dashboard
@@ -235,11 +233,6 @@ Functions:
 - initialRequest(): allows module to request data before dashboard loads
 
 All functions are called automatically from dashboard.
-
-## Image Module
-
-ImageModule inherits from module and contains some functions to make handling
-images easier.
 
 # Module Info
 TODO - all module info
