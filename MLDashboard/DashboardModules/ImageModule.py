@@ -18,8 +18,11 @@ def compareData(itemsa, itemsb, tol):
 
 class ImageModule(Module):
     """Base class for modules that rely on rendering images"""
-    def __init__(self, ax, config, title, datarequesttype):
-        super().__init__(ax, config, title, noticks=True, reqkeys=["width", "height", "rows", "cols", "refreshrate"])
+    def __init__(self, ax, config, title, datarequesttype, reqkeys: [list[str]] = None):
+        basereqkeys = ["width", "height", "rows", "cols", "refreshrate"]
+        if reqkeys is not None:
+            basereqkeys += reqkeys
+        super().__init__(ax, config, title, noticks=True, reqkeys=basereqkeys)
 
         #defaulting
         if 'conversion' not in self.config:

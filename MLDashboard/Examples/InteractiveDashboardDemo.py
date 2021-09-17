@@ -2,8 +2,8 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' #stops agressive error message printing
 import tensorflow as tf
 from tensorflow import keras
-import MLDashboard.MLDashboardBackend as MLDashboardBackend
-import MLDashboard.MLCallbacksBackend as MLCallbacksBackend
+from MLDashboard.MLDashboardBackend import createDashboard
+from MLDashboard.MLCallbacksBackend import DashboardCallbacks, CallbackConfig
 from MLDashboard.MLCommunicationBackend import Message, MessageMode
 import time
 
@@ -26,7 +26,7 @@ def run():
     print("Setting up dashboard...")
 
     #Create dashboard and return communication tools (this starts the process)
-    dashboardProcess, updatelist, returnlist = MLDashboardBackend.createDashboard(config='dashboarddemo.json')
+    dashboardProcess, updatelist, returnlist = createDashboard(config='dashboarddemo.json')
 
     print("Loading data...")
     (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
@@ -50,11 +50,10 @@ def run():
     print("Creating callbacks...")
     #Callbacks require update and return list for communicating with dashboard
     #Model and datasets are useful for sending that data to certain modules
-    config = MLCallbacksBackend.CallbackConfig()
+    config = CallbackConfig()
     labels = list(range(0,10))
     #labels = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
-    callback = MLCallbacksBackend.DashboardCallbacks(updatelist, returnlist, model, x_train, y_train,
-                                                     x_test, y_test, labels, config)
+    callback = DashboardCallbacks(updatelist, returnlist, model, x_train, y_train, x_test, y_test, labels, config)
 
     print("Starting training...")
     trainingstarttime = time.time()

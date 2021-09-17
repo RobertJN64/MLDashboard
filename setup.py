@@ -6,7 +6,7 @@ setup(
     author='Robert Nies',
     author_email='robertjnies@gamil.com',
     # Needed to actually package something
-    packages=['MLDashboard', 'MLDashboard.DashboardModules', 'MLDashboard.Examples'],
+    packages=['MLDashboard', 'MLDashboard.DashboardModules', 'MLDashboard.Examples', 'MLDashboard.Guides'],
     install_requires=[
         'matplotlib',
         'tensorflow',

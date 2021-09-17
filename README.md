@@ -3,35 +3,62 @@
 This guide assumes you already understand python and tensorflow.
 
 ## Installation
-```commandline
+```
 pip install git+https://github.com/RobertJN64/MLDashboard
 ```
 
-## Integration
+## Quick Start
+To start, you need a dashboard.json config file. This should be in the same directory as your script.
+Here is an example:
+```json
+{
+    "modules":[
+        [
+            ["LossMetricsGraph", {}],
+            ["LossMetricsNumerical", {}]
+        ],
+        [
+            ["StatusModule",{}],
+            ["EmptyModule", {}]
+        ]
+    ]
+}
+```
+
+
+NOTE: All code in this demo should be protected by
+```python
+if __name__ == '__main__':
+```
+to prevent multiprocessing conflicts.
+
 The dashboard can easily by added to an existing machine learning project.
 Import the dashboard as shown.
 
 ```python
-from MLDashboard.MLDashboardBackend import createDashboard, DashboardCallbacks, HandleRemaingCommands
+from MLDashboard.MLDashboardBackend import createDashboard
+from MLDashboard.MLCallbacksBackend import DashboardCallbacks, CallbackConfig
 from MLDashboard.MLCommunicationBackend import Message, MessageMode
 ```
 
 Before training starts, create the dashboard.
 ```python
-dashboardProcess, updatelist, returnlist = createDashboard()
+#MAKE SURE YOU HAVE A DASHBOARD.JSON FILE IN THE SAME DIRECTORY AS YOUR SCRIPT
+dashboardProcess, updatelist, returnlist = createDashboard(config='dashboard.json')
 ```
 
 Connect the callbacks to your training.
 ```python
-model.fit(x_train, y_train, epochs=10,
-        callbacks=[DashboardCallbacks(updatelist, returnlist, model, x_train, y_train, x_test, y_test)]
-    )
+config = CallbackConfig()
+labels = list(range(0,10)) #labels should be customized for the data. This is for mnist number recognition
+callback = DashboardCallbacks(updatelist, returnlist, model, x_train, y_train, x_test, y_test, labels, config)
+
+model.fit(x_train, y_train, epochs=10, callbacks=[callback])
 ```
 
 After training ends, you can send evaluation stats to the dashboard.
 ```python
-res = model.evaluate(x_test, y_test, batch_size=128)
-updatelist.append(Message(MessageMode.Evaluation, dict(zip(model.metrics_names, res))))
+model.evaluate(x_test, y_test, batch_size=128, callbacks=[callback])
 ```
 
 To exit the dashboard cleanly, use the following code:
@@ -40,38 +67,82 @@ updatelist.append(Message(MessageMode.End, {}))
 print("Exiting cleanly...")
 dashboardProcess.join()
 print("Dashboard exited.")
-HandleRemaingCommands(returnlist, model)
+#This handles any extra data that the dashboard sent, such as save commands
+callback.HandleRemaingCommands()
 ```
 
-InteractiveDashboardDemo shows a full example.
+Here is a full example with python code:
+```python
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = '2' #stops agressive error message printing
+import tensorflow as tf
+from tensorflow import keras
+from MLDashboard.MLDashboardBackend import createDashboard
+from MLDashboard.MLCallbacksBackend import DashboardCallbacks, CallbackConfig
+from MLDashboard.MLCommunicationBackend import Message, MessageMode
 
-## Customization
-The modules shown in the dashboard can be changed in the dashboard.json file, or by specifying a new config file
-in createDashboard().
+def run():
+    print("Starting interactive dashboard demo...")
+    print("Setting up dashboard...")
 
-A properly formatted dashboard.json file should look like this.
-```json
-{
-  "modules": [
-    [
-       ["LossMetricsGraph", {}],
-       ["LossMetricsNumerical", {}],
-       ["TrainingSetSampleImages",
-          {"width": 28,
-           "height": 28,
-           "rows": 2,
-           "cols": 4}]
-    ],
-    [
-       ["StatusModule", {}],
-       ["ControlButtons", {}],
-       ["EmptyModule", {}]
-    ]
-  ]
-}
+    #Create dashboard and return communication tools (this starts the process)
+    #MAKE SURE YOU HAVE A DASHBOARD.JSON FILE IN THE SAME DIRECTORY AS YOUR SCRIPT
+    dashboardProcess, updatelist, returnlist = createDashboard(config='dashboard.json')
+
+    print("Loading data...")
+    (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
+
+    print("Formatting data...")
+    x_train = x_train.reshape(-1, 784).astype("float32") / 255.0
+    x_test = x_test.reshape(-1, 784).astype("float32") / 255.0
+
+    print("Sampling data...")
+    # Limit the train data to 10000 samples
+    x_train = x_train[:10000]
+    y_train = y_train[:10000]
+    # Limit test data to 1000 samples
+    x_test = x_test[:1000]
+    y_test = y_test[:1000]
+
+    print("Creating model...")
+    model = keras.Sequential([keras.layers.Dense(128, activation='relu'), keras.layers.Dense(10)])
+
+    model.compile(optimizer='adam', metrics=["accuracy"], 
+                  loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True))
+
+
+    print("Creating callbacks...")
+    #Callbacks require update and return list for communicating with dashboard
+    #Model and datasets are useful for sending that data to certain modules
+    config = CallbackConfig()
+    labels = list(range(0,10))
+    callback = DashboardCallbacks(updatelist, returnlist, model, x_train, y_train, x_test, y_test, labels, config)
+
+    model.fit(x_train, y_train, epochs=50, callbacks=[callback])
+
+    print("Evaluating model...")
+    #This is connected to the callback so the data is sent to the dashboard
+    model.evaluate(x_test, y_test, batch_size=128, callbacks=[callback])
+
+    updatelist.append(Message(MessageMode.End, {}))
+    print("Exiting cleanly...")
+    dashboardProcess.join()
+    print("Dashboard exited.")
+    #This handles any extra data that the dashboard sent, such as save commands
+    callback.HandleRemaingCommands()
+
+if __name__ == '__main__':
+    run()
 ```
-This creates a dashboard with 2 rows of 3 cols. The dict after the module name contains config info.
 
+## Other guides:
+ - [Customizing the Dashboard](Guides/Customization.md)
+ - [Creating a Custom Module](Guides/CustomModule.md)
+ - [Creating Custom Callbacks (advanced)](Guides/CustomCallbacks.md)
+ - [Module Documentation]
+ - [Data Structure Documentation]
+ - [Primary Functions Documentation]
+ 
 # Data Structure Info
 All data is sent in packets containing a data type (int) and data body (dict).
 
@@ -139,34 +210,7 @@ class TrainingSetSampleImages(ImageModule):
 ```
 
 # Tutorials
-## Creating a Custom Module
-All modules must inherit from the base class module. This can be directly or indirectly through sub classes such as ImageModule.
-A module must provide an init function and an update function. If necessary, initialRequest can be used as well.
-More information on these functions can be found in the Module info under Classes.
 
-#### Example:
-```python
-from MLDashboard.DashboardModules.Module import Module
-
-class MyModule(Module):
-    def __init__(self, ax, config):
-        super().__init__(ax, config, "My Module", noticks=True)
-        #Add more init code here
-
-    def update(self, data):
-        pass
-        #Code to run on update here
-```
-
-To register your module, add this code in your main script.
-```python
-import MyModule
-from MLDashboard.MLDashboardBackend import allModules
-
-allModules["MyModule"] = MyModule
-```
-
-More examples can be found by looking in DashboardModules.
 
 # Classes:
 ## Dashboard
