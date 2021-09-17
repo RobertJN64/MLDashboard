@@ -3,7 +3,7 @@
 Dashboards are created based on .json config files.
 
 These files look like this:
-```json
+```python
 {
     "modules":[
         [
@@ -41,8 +41,8 @@ Modules should be referred to by their "friendly name" as defined in this code:
 Modules can have configuration. This is added in the {} after the module name.
 
 ```python
-["TrainingSetSampleImages": 
-  {"width": 28, "height": 28, "rows": 2, "cols": 4, refreshrate=5}]
+["TrainingSetSampleImages",
+  {"width": 28, "height": 28, "rows": 2, "cols": 4, "refreshrate": 5}]
 ```
 
 Configuration can also be passed to all modules by adding it into the main json.
