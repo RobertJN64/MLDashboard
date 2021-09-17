@@ -10,7 +10,7 @@ pip install git+https://github.com/RobertJN64/MLDashboard
 ## Quick Start
 To start, you need a dashboard.json config file. This should be in the same directory as your script.
 Here is an example:
-```json
+```python
 {
     "modules":[
         [
