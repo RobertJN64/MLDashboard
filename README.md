@@ -137,7 +137,7 @@ if __name__ == '__main__':
 
 ## Other guides:
  - [Customizing the Dashboard](MLDashboard/Guides/Customization.md)
- - [Creating a Custom Module](MLDashboard/Guides/CustomModule.md)
+ - [Creating a Custom Module](MLDashboard/Guides/CustomModules.md)
  - [Creating Custom Callbacks (advanced)](MLDashboard/Guides/CustomCallbacks.md)
  - [Module Documentation]
  - [Data Structure Documentation]
