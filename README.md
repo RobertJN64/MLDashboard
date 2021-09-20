@@ -139,9 +139,9 @@ if __name__ == '__main__':
  - [Customizing the Dashboard](MLDashboard/Guides/Customization.md)
  - [Creating a Custom Module](MLDashboard/Guides/CustomModules.md)
  - [Creating Custom Callbacks (advanced)](MLDashboard/Guides/CustomCallbacks.md)
- - [Module Documentation]
- - [Data Structure Documentation]
- - [Primary Functions Documentation]
+ - [Module Documentation](MLDashboard/Guides/Modules.md)
+ - [Data Structure Documentation](MLDashboard/Guides/DataStructures.md)
+ - [Primary Functions Documentation](MLDashboard/Guides/Functions.md)
  
 # Data Structure Info
 All data is sent in packets containing a data type (int) and data body (dict).
@@ -192,22 +192,7 @@ class ControlButtons(Module):
 
 Sending data from initialRequest:
 
-```python
-from MLDashboard.DashboardModules.ImageModule import ImageModule
-from MLDashboard.MLCommunicationBackend import Message, MessageMode
 
-
-class TrainingSetSampleImages(ImageModule):
-    def __init__(self, ax, config):
-        super().__init__(ax, config, "Training Set Sample Images")
-
-    def initialRequests(self):
-        return [Message(MessageMode.Train_Set_Sample, {"num": self.config['rows'] * self.config['cols']})]
-
-    def update(self, data):
-        if data.body == MessageMode.Train_Set_Sample:
-            print(data)
-```
 
 
 # Classes:
