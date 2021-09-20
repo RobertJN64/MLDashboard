@@ -35,7 +35,7 @@ def dashboardProcess(configjson: dict, updatelist: list, returnlist: list):
 def createDashboard(config='dashboard.json',
                     waitforstart=True) -> tuple[multiprocessing.Process, list[Message], list[Message]]:
     """
-    Creates a dashboard running in a seperate thread.
+    Creates a dashboard running in a seperate process.
     Returns the process, updatelist, and return list for communication
     :param config: The file to load the dashboard config from
     :param waitforstart: Should the main process halt while the dashboard starts

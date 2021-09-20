@@ -3,11 +3,20 @@
 This guide contains info on the main functions that the user should
 interact with.
 
-# MLDashboardBackend
+## MLDashboardBackend
 
-# MLCallbacksBackend
+### createDashboard()
 
-## DashboardCallbacks
+Loads a dashboard in a seperate process. Returns process, updatelist, and return list.
+
+Params:
+ - config: Path to config file (default: dashboard.json)
+ - waitforstart: Pauses main process until dashboard is ready (default: True)
+
+
+## MLCallbacksBackend
+
+### DashboardCallbacks
 
 Inherits from keras.Callbacks.Callback. This contains all communication between
 model training and the dashboard.
@@ -23,7 +32,7 @@ Params:
 - prediction_labels: Allows images to be labeled with friendly text
 - config: Customize when data is sent
 
-### Example: model.fit() with callbacks
+#### Example: model.fit() with callbacks
 ```python
 from MLDashboard.MLCallbacksBackend import DashboardCallbacks, CallbackConfig
 config = CallbackConfig()
@@ -32,19 +41,19 @@ callback = DashboardCallbacks(updatelist, returnlist, model, x_train, y_train, x
 model.fit()
 ```
 
-# MLCommunicationBackend
+## MLCommunicationBackend
 
-## MessageMode
+### MessageMode
 
 Message mode is an enum with different types of messages that the dashboard should receieve
 or send.
 
-## Message
+### Message
 
 Message is a class that contains a mode and a data payload. All data going to and from
 the dashboard is a Message.
 
-### Example: Send the dashboard the end message
+#### Example: Send the dashboard the end message
 ```python
 from MLDashboard.MLCallbacksBackend import Message, MessageMode
 updatelist.append(Message(MessageMode.End, {})) #message does not need a payload
