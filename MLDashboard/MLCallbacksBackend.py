@@ -2,6 +2,7 @@ from MLDashboard.MLCommunicationBackend import Message, MessageMode
 from tensorflow.keras.callbacks import Callback
 import numpy as np
 import warnings
+from typing import List
 
 
 class CallbackConfig:
@@ -29,7 +30,7 @@ class CallbackConfig:
 
 #region Callbacks
 class DashboardCallbacks(Callback):
-    def __init__(self, updatelist: list[Message], returnlist: list[Message], model, x_train, y_train, x_test, y_test,
+    def __init__(self, updatelist: List[Message], returnlist: List[Message], model, x_train, y_train, x_test, y_test,
                  prediction_labels, config: CallbackConfig):
         """
         This inherits from Tensorflow callbacks and connects the model training to the dashboard. Can be customized
@@ -148,7 +149,7 @@ class DashboardCallbacks(Callback):
 
     # on epoch end
     def handleCommands(self, allowstop=True):
-        rmlist: list[int] = []
+        rmlist: List[int] = []
         for index, item in enumerate(self.returnlist):
             if item.mode == MessageMode.Command:
                 rmlist.append(index)

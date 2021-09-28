@@ -11,6 +11,7 @@ from MLDashboard.DashboardModules.Module import Module
 
 from MLDashboard.MLCommunicationBackend import Message, MessageMode
 import matplotlib.pyplot as pyplot
+from typing import List
 import multiprocessing
 import json
 import time
@@ -33,7 +34,7 @@ def dashboardProcess(configjson: dict, updatelist: list, returnlist: list):
     dashboard.runDashboardLoop()
 
 def createDashboard(config='dashboard.json',
-                    waitforstart=True) -> tuple[multiprocessing.Process, list[Message], list[Message]]:
+                    waitforstart=True) -> tuple[multiprocessing.Process, LMessage], List[Message]]:
     """
     Creates a dashboard running in a seperate process.
     Returns the process, updatelist, and return list for communication
@@ -41,8 +42,8 @@ def createDashboard(config='dashboard.json',
     :param waitforstart: Should the main process halt while the dashboard starts
     """
     syncmanager = multiprocessing.Manager()
-    updatelist: list[Message] = syncmanager.list()
-    returnlist: list[Message] = syncmanager.list()
+    updatelist: List[Message] = syncmanager.list()
+    returnlist: List[Message] = syncmanager.list()
 
     with open(config) as f:
         configjson = json.load(f)
@@ -98,12 +99,12 @@ class Dashboard:
     Dashboard is a class that handles high level matplotlib interaction and sends data to sub modules.
     Dashbaords should be created with the createDashboard function.
     """
-    def __init__(self, configjson: dict, updatelist: list[Message], returnlist:  list[Message]):
+    def __init__(self, configjson: dict, updatelist: List[Message], returnlist:  list[Message]):
         self.configjson = configjson
         self.updatelist = updatelist
         self.returnlist = returnlist
         moduleclasslist, moduleconfiglist, self.width, self.height = getModules(configjson)
-        self.modulelist: list[Module] = []
+        self.modulelist: List[Module] = []
 
 
         self.fig = pyplot.figure()
