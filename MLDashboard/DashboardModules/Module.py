@@ -1,8 +1,9 @@
 from MLDashboard.MLCommunicationBackend import Message
+from typing import List
 import warnings
 
 class Module:
-    def __init__(self, ax, config: dict, title: str, noticks=False, reqkeys: list[str] = None):
+    def __init__(self, ax, config: dict, title: str, noticks=False, reqkeys: List[str] = None):
         """
         Creates a module in a axes
 

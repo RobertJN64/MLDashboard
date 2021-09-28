@@ -1,6 +1,7 @@
 from MLDashboard.DashboardModules.Module import Module
 from MLDashboard.MLCommunicationBackend import Message
 from PIL import Image
+from typing import List
 
 def compareImages(imga, imgb):
     if imga == imgb:
@@ -18,7 +19,7 @@ def compareData(itemsa, itemsb, tol):
 
 class ImageModule(Module):
     """Base class for modules that rely on rendering images"""
-    def __init__(self, ax, config, title, datarequesttype, reqkeys: [list[str]] = None):
+    def __init__(self, ax, config, title, datarequesttype, reqkeys: List[str] = None):
         basereqkeys = ["width", "height", "rows", "cols", "refreshrate"]
         if reqkeys is not None:
             basereqkeys += reqkeys

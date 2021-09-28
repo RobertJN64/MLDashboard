@@ -5,6 +5,7 @@ from matplotlib.widgets import Button
 from mpl_toolkits.axes_grid1.inset_locator import InsetPosition
 import warnings
 import copy
+from typing import List
 
 
 warnings.filterwarnings(action='ignore',
@@ -26,7 +27,7 @@ class ControlButtons(Module):
         self.stopbutton.on_clicked(self.stopFunc)
         self.savebutton.on_clicked(self.saveFunc)
 
-        self.internalreturnlist: list[Message] = []
+        self.internalreturnlist: List[Message] = []
 
     def update(self, data: Message):
         out = copy.deepcopy(self.internalreturnlist)
