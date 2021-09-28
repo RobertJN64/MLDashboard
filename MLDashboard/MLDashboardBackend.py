@@ -99,7 +99,7 @@ class Dashboard:
     Dashboard is a class that handles high level matplotlib interaction and sends data to sub modules.
     Dashbaords should be created with the createDashboard function.
     """
-    def __init__(self, configjson: dict, updatelist: List[Message], returnlist:  list[Message]):
+    def __init__(self, configjson: dict, updatelist: List[Message], returnlist: List[Message]):
         self.configjson = configjson
         self.updatelist = updatelist
         self.returnlist = returnlist
