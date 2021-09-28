@@ -34,7 +34,7 @@ def dashboardProcess(configjson: dict, updatelist: list, returnlist: list):
     dashboard.runDashboardLoop()
 
 def createDashboard(config='dashboard.json',
-                    waitforstart=True) -> tuple[multiprocessing.Process, LMessage], List[Message]]:
+                    waitforstart=True) -> tuple[multiprocessing.Process, List[Message], List[Message]]:
     """
     Creates a dashboard running in a seperate process.
     Returns the process, updatelist, and return list for communication
