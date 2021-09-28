@@ -11,7 +11,7 @@ from MLDashboard.DashboardModules.Module import Module
 
 from MLDashboard.MLCommunicationBackend import Message, MessageMode
 import matplotlib.pyplot as pyplot
-from typing import List
+from typing import List, Tuple
 import multiprocessing
 import json
 import time
@@ -34,7 +34,7 @@ def dashboardProcess(configjson: dict, updatelist: list, returnlist: list):
     dashboard.runDashboardLoop()
 
 def createDashboard(config='dashboard.json',
-                    waitforstart=True) -> tuple[multiprocessing.Process, List[Message], List[Message]]:
+                    waitforstart=True) -> Tuple[multiprocessing.Process, List[Message], List[Message]]:
     """
     Creates a dashboard running in a seperate process.
     Returns the process, updatelist, and return list for communication
