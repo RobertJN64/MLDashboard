@@ -4,7 +4,7 @@ This guide assumes you already understand python and tensorflow.
 
 ## Installation
 ```
-pip install git+https://github.com/RobertJN64/MLDashboard
+pip install MLDashboard
 ```
 
 ## Quick Start
