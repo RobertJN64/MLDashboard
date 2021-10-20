@@ -14,9 +14,10 @@ setup(
         'pillow'
     ],
     # *strongly* suggested for sharing
-    version='1.0.6',
+    version='1.0.7',
     # The license can be anything you like
     license='MIT',
     description='Machine learning dashboard that integrates with tensorflow. Great for monitoring training. Has tools for classification and images.',
     long_description=open('README.md').read(),
+    long_description_content_type='text/markdowd'
 )
