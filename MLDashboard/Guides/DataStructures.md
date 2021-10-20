@@ -39,7 +39,7 @@ from MLDashboard.MLCommunicationBackend import MessageMode
 
 class TrainingSetSampleImages(ImageModule):
     def __init__(self, ax, config):
-        super().__init__(ax, config, "Training Set Sample Images", MessageMode.Train_Set_Sample)
+        super().__init__(ax, config, str("Training Set Sample Images"), MessageMode.Train_Set_Sample)
 
     def initialRequests(self):
         return self.generateRequest() #built in from ImageModule
