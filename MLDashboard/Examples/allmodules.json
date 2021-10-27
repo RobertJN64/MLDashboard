@@ -2,7 +2,7 @@
   "modules": [
     [
        ["ControlButtons", {}],
-       ["EmptyModules", {}],
+       ["EmptyModule", {}],
        ["ImageModule", {}],
        ["LossMetricsGraph", {}],
        ["LossMetricsNumerical", {}],

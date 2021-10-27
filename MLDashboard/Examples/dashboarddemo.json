@@ -1,22 +1,20 @@
 {
   "modules": [
     [
-       ["ControlButtons", {}],
-       ["EmptyModules", {}],
-       ["ImageModule", {}],
        ["LossMetricsGraph", {}],
        ["LossMetricsNumerical", {}],
-       ["PredImages", {}],
+       ["TrainingSetSampleImages", {"refreshrate":  3}]
+    ],
+    [
        ["StatusModule", {}],
-       ["TrainingSetSampleImages", {}],
-       ["WrongPredImages", {}]
+       ["WrongPredImages", {"refreshrate": 5}],
+       ["PredImages", {"refreshrate": 5}]
     ]
   ],
   "config": {"width": 28,
-             "height": 28,
-             "refreshrate": 5,
-             "rows": 2,
-             "cols": 4,
-             "correctcolor": "blue",
-             "incorrectcolor": "orange"}
+           "height": 28,
+           "rows": 2,
+           "cols": 4,
+           "correctcolor": "blue",
+           "incorrectcolor": "orange"}
 }

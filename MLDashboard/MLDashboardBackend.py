@@ -26,10 +26,10 @@ allModules = {'LossMetricsGraph': LossMetricsGraph,
               'WrongPredImages': WrongPredImages,
               'EmptyModule': EmptyModule}
 
-def dashboardProcess(configjson: dict, updatelist: list, returnlist: list):
+def dashboardProcess(configjson: dict, updatelist: list, returnlist: list, openatend):
     """Wrapper function to run dashboard in a seperate process. This should not be called manually."""
     print("Loading dashboard...")
-    dashboard = Dashboard(configjson, updatelist, returnlist)
+    dashboard = Dashboard(configjson, updatelist, returnlist, openatend)
     print("Starting dashboard...")
     dashboard.runDashboardLoop()
 
@@ -48,7 +48,7 @@ def createDashboard(config='dashboard.json', waitforstart=True,
 
     with open(config) as f:
         configjson = json.load(f)
-    process = multiprocessing.Process(target=dashboardProcess, args=(configjson, updatelist, returnlist,openatend,))
+    process = multiprocessing.Process(target=dashboardProcess, args=(configjson, updatelist, returnlist, openatend,))
     process.start()
 
     if waitforstart:
