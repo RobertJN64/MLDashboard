@@ -8,7 +8,7 @@ def test_custom_callbacks():
     if CCD == CCD:
         pass
 
-def every_module_test():
+def test_every_module():
     with open("MLDashboard/Examples/allmodules.json") as f:
         with open("MLDashboard/Examples/dashboarddemo.json", 'w+') as g:
             g.write(f.read())

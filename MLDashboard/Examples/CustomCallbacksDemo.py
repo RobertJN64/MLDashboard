@@ -5,7 +5,7 @@ import MLDashboard.MLDashboardBackend as MLDashboardBackend
 import MLDashboard.MLCallbacksBackend as MLCallbacksBackend
 from MLDashboard.MLCommunicationBackend import Message, MessageMode
 import time
-from InteractiveDashboardDemo import get_model
+from MLDashboard.Examples.InteractiveDashboardDemo import get_model
 
 class myCustomCallback(MLCallbacksBackend.DashboardCallbacks):
     def __init__(self, updatelist, returnlist, model, x_train, y_train, x_test, y_test, labels, config):
