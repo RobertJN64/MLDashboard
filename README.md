@@ -1,4 +1,11 @@
-# Getting Started
+# MLDashboard
+
+![Tests Badge](https://github.com/RobertJN64/MLDashboard/actions/workflows/tests.yml/badge.svg)
+![Python Version Badge](https://img.shields.io/pypi/pyversions/MLDashboard)
+![License Badge](https://img.shields.io/github/license/RobertJN64/MLDashboard)
+
+
+## Getting Started
 
 This guide assumes you already understand python and tensorflow.
 
