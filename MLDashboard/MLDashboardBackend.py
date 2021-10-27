@@ -33,13 +33,14 @@ def dashboardProcess(configjson: dict, updatelist: list, returnlist: list):
     print("Starting dashboard...")
     dashboard.runDashboardLoop()
 
-def createDashboard(config='dashboard.json',
-                    waitforstart=True) -> Tuple[multiprocessing.Process, List[Message], List[Message]]:
+def createDashboard(config='dashboard.json', waitforstart=True,
+                    openatend=True) -> Tuple[multiprocessing.Process, List[Message], List[Message]]:
     """
     Creates a dashboard running in a seperate process.
     Returns the process, updatelist, and return list for communication
     :param config: The file to load the dashboard config from
     :param waitforstart: Should the main process halt while the dashboard starts
+    :param openatend: Calls pyplot.show() at end of training
     """
     syncmanager = multiprocessing.Manager()
     updatelist: List[Message] = syncmanager.list()
@@ -47,7 +48,7 @@ def createDashboard(config='dashboard.json',
 
     with open(config) as f:
         configjson = json.load(f)
-    process = multiprocessing.Process(target=dashboardProcess, args=(configjson, updatelist, returnlist,))
+    process = multiprocessing.Process(target=dashboardProcess, args=(configjson, updatelist, returnlist,openatend,))
     process.start()
 
     if waitforstart:
@@ -99,7 +100,8 @@ class Dashboard:
     Dashboard is a class that handles high level matplotlib interaction and sends data to sub modules.
     Dashbaords should be created with the createDashboard function.
     """
-    def __init__(self, configjson: dict, updatelist: List[Message], returnlist: List[Message]):
+    def __init__(self, configjson: dict, updatelist: List[Message], returnlist: List[Message],
+                 openatend:bool = False):
         self.configjson = configjson
         self.updatelist = updatelist
         self.returnlist = returnlist
@@ -128,6 +130,7 @@ class Dashboard:
         self.currentmode = "Live Render"  # are we rendering during training
         self.timer = 0  # time to do a full update loop
         self.modulestimer = [0.0] * len(self.modulelist) #how long does it take to render each module
+        self.openatend = openatend
 
     def runDashboardLoop(self): #this function is designed to be run in a separate process
         """Continually updates modules"""
@@ -160,7 +163,8 @@ class Dashboard:
         for module in self.modulelist:
             self.updateModule(module, Message(MessageMode.End, {}))
 
-        pyplot.show()
+        if self.openatend:
+            pyplot.show()
         for module in self.modulelist:
             req = module.update(Message(MessageMode.End, {}))
             if req is not None:

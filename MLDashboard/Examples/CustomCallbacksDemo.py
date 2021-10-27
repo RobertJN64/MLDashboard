@@ -15,13 +15,14 @@ class myCustomCallback(MLCallbacksBackend.DashboardCallbacks):
         print("We are beginning the evaluation step.")
 
 
-def run():
+def run(testmode = False):
     print("Starting custom callbacks demo...")
     print("Setting up dashboard...")
 
     #Create dashboard and return communication tools (this starts the process)
     dashboardjsonfile = os.path.dirname(__file__) + '/dashboarddemo.json'
-    dashboardProcess, updatelist, returnlist = MLDashboardBackend.createDashboard(dashboardjsonfile)
+    dashboardProcess, updatelist, returnlist = MLDashboardBackend.createDashboard(dashboardjsonfile,
+                                                                                  openatend=not testmode)
 
     print("Loading data...")
     (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()

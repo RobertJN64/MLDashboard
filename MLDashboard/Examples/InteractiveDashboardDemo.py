@@ -21,13 +21,13 @@ def get_model():
 
     return model
 
-def run():
+def run(testmode=False):
     print("Starting interactive dashboard demo...")
     print("Setting up dashboard...")
 
     #Create dashboard and return communication tools (this starts the process)
     dashboardjsonfile = os.path.dirname(__file__) + '/dashboarddemo.json'
-    dashboardProcess, updatelist, returnlist = createDashboard(dashboardjsonfile)
+    dashboardProcess, updatelist, returnlist = createDashboard(dashboardjsonfile, openatend=not testmode)
 
     print("Loading data...")
     (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
