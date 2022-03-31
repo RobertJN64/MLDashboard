@@ -11,5 +11,5 @@ include setup.py
 
 # Include the data files
 recursive-include MLDashboard/DashboardModules *
-recursive-include MLDashboard/DashboardExamples *
-recursive-include MLDashboard/DashboardGuides *
+recursive-include MLDashboard/Examples *
+recursive-include MLDashboard/Guides *
