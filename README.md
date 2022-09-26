@@ -4,6 +4,11 @@
 ![Python Version Badge](https://img.shields.io/pypi/pyversions/MLDashboard)
 ![License Badge](https://img.shields.io/github/license/RobertJN64/MLDashboard)
 
+![Image](image.png)
+
+Monitoring solution for tensorflow training. Particulary useful for
+image classification models. Not compatible with google colab or other 
+notebook based runtimes.
 
 ## Getting Started
 
@@ -13,6 +18,10 @@ This guide assumes you already understand python and tensorflow.
 ```
 pip install MLDashboard
 ```
+
+## Examples
+
+See [Examples](MLDashboard/Examples) for usage.
 
 ## Quick Start
 To start, you need a dashboard.json config file. This should be in the same directory as your script.
