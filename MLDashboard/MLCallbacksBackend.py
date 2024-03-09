@@ -38,7 +38,7 @@ class DashboardCallbacks(Callback):
 
         :param updatelist: List from dashboard creation
         :param returnlist: List from dashboard creation
-        :param model: Tensorflow model
+        :param model: Tensorflow model (this is no longer needed in tf 2.16)
         :param x_train: Training set features
         :param y_train: Training set output
         :param x_test: Test set features
@@ -50,7 +50,6 @@ class DashboardCallbacks(Callback):
         super().__init__()
         self.updatelist = updatelist
         self.returnlist = returnlist
-        self.model = model
         self.x_train = x_train
         self.y_train = y_train
         self.x_test = x_test
